@@ -1,0 +1,22 @@
+#include<lpc214x.h>
+unsigned int delay;
+unsigned char *ptr,arr[]="HELLO WORLD\r";
+int main()
+{
+PINSEL0=0X0000005; //select TXD0 and RXD0 lines
+U0LCR = 0X00000083; //enable baud rate divisor loading and
+U0DLM = 0X00; //select the data format,,,device latch msb
+ U0DLL = 0x13; //select baud rate 9600 bps,,,device latch lsb
+ U0LCR = 0X00000003;//line control register
+while(1)
+{
+ptr = arr;
+while(*ptr!='\0')
+{
+ U0THR=*ptr++;
+while(!(U0LSR & 0x20)== 0x20);
+for(delay=0;delay<=600;delay++);
+}
+for(delay=0;delay<=60000;delay++);
+}
+}
